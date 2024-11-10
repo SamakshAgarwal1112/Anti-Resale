@@ -13,6 +13,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 import { Input } from './ui/input';
 
 const clientId = process.env.WEB3_CLIENT_ID || '';
+console.log(cle)
 
 const chainConfig = {
   chainNamespace: CHAIN_NAMESPACES.EIP155,
