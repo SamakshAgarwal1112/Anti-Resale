@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+
+# TicketChain - Web3 Event Ticketing Platform
+## Overview
+TicketChain is a decentralized event ticketing platform designed to tackle the issue of black market ticketing. It leverages Web3 technology for ticketing transparency and provides a secure way to buy, sell, and return event tickets.
+
+![TicketChain Main Page](./public/Landing.jpg)
+
+## Features
+Event Exploration: Users can browse a list of events, including their details like title, date, location, price, and category.
+Ticket Purchase: Users can click the "Buy Ticket" button to purchase a ticket for an event.
+Ticket Return: After a ticket is purchased, a "Return Ticket" button will be displayed, allowing users to return their ticket.
+Event Creation - Organizations can list their events on the platform for smooth decentralised management.
 
 ## Getting Started
 
-First, run the development server:
+To run the project locally, follow these steps:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. Clone the repository.
+2. Install dependencies using `npm install`.
+3. Run the app with `npm run dev`.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## How It Works
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### 1. **User Registration**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Users can register on TicketChain by providing their Aadhar card number after user authentication on Web3Auth. The Aadhar information is hashed and stored securely on the blockchain to ensure authenticity.
 
-## Learn More
+### 2. **Browse Events**
 
-To learn more about Next.js, take a look at the following resources:
+After logging in, users can browse through various events sorted by category, price, or date.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 3. **Ticket Purchase**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Tickets are purchased directly on the platform, and payment is done through various payment options.
 
-## Deploy on Vercel
+### 4. **Return Ticket**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+In case user is unable to use his ticket, he can return his ticket to the platform only and get his cancelled ticket refund.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 5. **Refunds & Re-listing**
+
+Tickets that are returned after the refund process are re-listed for sale, ensuring no tickets go unused.
+
+## Setup & Installation
+
+To run TicketChain locally, follow the steps below:
+1. Clone the repository.
+2. Install dependencies using `npm install`.
+3. Run the app with `npm run dev`.
+### Prerequisites
+
+- Node.js (>=16.0.0)
+- MongoDB
+- Web3Auth (for Web3 login integration)
