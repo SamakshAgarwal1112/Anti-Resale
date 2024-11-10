@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Ticket, Search, Calendar, Shield, Users, Star } from 'lucide-react'
@@ -8,15 +8,108 @@ import { Ticket, Search, Calendar, Shield, Users, Star } from 'lucide-react'
 // Importing UI components
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { Web3Auth } from '@web3auth/modal';
+import { CHAIN_NAMESPACES, IProvider, WEB3AUTH_NETWORK } from '@web3auth/base';
+import { EthereumPrivateKeyProvider } from '@web3auth/ethereum-provider';
+import AadharModal from '@/components/Modal';
+import axios from 'axios';
+
+
+const clientId = process.env.WEB3_CLIENT_ID || '';
+
+const chainConfig = {
+  chainNamespace: CHAIN_NAMESPACES.EIP155,
+  chainId: '0xaa36a7',
+  rpcTarget: 'https://rpc.ankr.com/eth_sepolia',
+  displayName: 'Sepolia Testnet',
+  blockExplorerId: 'https://sepolia.etherscan.io',
+  ticker: 'ETH',
+  tickerName: 'Ethereum',
+};
+
+const privateKeyProvider = new EthereumPrivateKeyProvider({
+  config: { chainConfig },
+});
+
+const web3Auth = new Web3Auth({
+  clientId,
+  web3AuthNetwork: 'sapphire_devnet',
+  privateKeyProvider,
+});
 
 export default function LandingPage() {
   const [activeTestimonial, setActiveTestimonial] = useState(0)
+  const [provider, setProvider] = useState(null);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [userInfo, setUserInfo] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [aadharId, setAadharId] = useState('');
+  const [userName, setUserName] = useState('');
+  
+
+  useEffect(() => {
+    const init = async () => {
+      try {
+        await web3Auth.initModal();
+        setProvider(web3Auth.provider);
+        if (web3Auth.connected) {
+          setLoggedIn(true);
+          const user = await web3Auth.getUserInfo();
+          setUserInfo(user);
+        }
+      } catch (error) {
+        console.error("Error initializing Web3Auth:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    init();
+  }, []);
+
+  const handleLogin = async () => {
+    try {
+      const web3AuthProvider = await web3Auth.connect();
+      setProvider(web3AuthProvider);
+      setLoggedIn(true);
+      const user = await web3Auth.getUserInfo();
+      setUserInfo(user);
+      if (user) setIsModalOpen(true);
+    } catch (error) {
+      console.error("Error logging in:", error);
+    }
+  };
+
+  const handleLogOut = async () => {
+    try {
+      await web3Auth.logout();
+      setProvider(null);
+      setLoggedIn(false);
+      setUserInfo(null);
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
+  };
+
+  const handleAadharSubmit = async () => {
+    try {
+      const response = await axios.post('/api/submitAadhar', { aadharId });
+      console.log('Aadhar submitted:', response.data);
+    } catch (error) {
+      console.error("Error submitting Aadhar:", error);
+    }
+  };
+
 
   const testimonials = [
     { name: "Alex Johnson", role: "Event Organizer", content: "TicketChain has revolutionized how we manage our events. The blockchain technology ensures security and transparency like never before." },
     { name: "Sarah Lee", role: "Concert Attendee", content: "I love how easy it is to buy and transfer tickets. The peace of mind knowing my tickets are authentic is priceless." },
     { name: "Michael Brown", role: "Festival Director", content: "The analytics and insights provided by TicketChain have helped us optimize our events and increase attendance significantly." },
   ]
+
+  if (loading) {
+    return <div>Loading Web3 Auth...</div>;
+  }
 
   return (
     <div className="min-h-screen bg-white ">
@@ -33,9 +126,24 @@ export default function LandingPage() {
               <Link href="/book" className="text-sm font-medium text-gray-600 hover:text-blue-600">
                 Book
               </Link>
-              <Button className="bg-blue-600 hover:bg-blue-700">
-                Log In
-              </Button>
+              <div>
+              {!loggedIn ? (
+                <Button onClick={handleLogin} className="bg-blue-600 hover:bg-blue-700 text-white">
+                  Login
+                </Button>
+              ) : (
+                <Button onClick={handleLogOut} className="bg-blue-600 hover:bg-blue-700 text-white">
+                  Logout
+                </Button>
+              )}
+                          {isModalOpen && (
+                <AadharModal
+                    userName={userName}
+                    onSubmit={handleAadharSubmit}
+                    onClose={() => setIsModalOpen(false)}
+                />
+            )}
+            </div>
             </div>
           </div>
         </div>

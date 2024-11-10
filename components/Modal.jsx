@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from './ui/button';
 
-const AadharModal = ({ onClose, onSubmit }) => {
+const AadharModal = ({ onClose, onSubmit, userName }) => {
     const [aadharId, setAadharId] = useState('');
     const [error, setError] = useState('');
 
@@ -20,7 +20,7 @@ const AadharModal = ({ onClose, onSubmit }) => {
             setError('Aadhar ID must be 12 digits');
             return;
         }
-        onSubmit(aadharId); // Call the parent function to send Aadhar ID to the backend
+        onSubmit(aadharId, userName); // Send both Aadhar ID and Name to the parent function
         onClose(); // Close the modal after submission
     };
 

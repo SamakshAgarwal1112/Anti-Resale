@@ -29,13 +29,19 @@ export const getEventById = async (req, res) => {
 };
 
 export const createEvent = async (req, res) => {
-    const { name, date, time, venue, description, mode, ticketsAvailable, ticketPrice, photos } = req.body;
+    const { name, date, time, venue, description, mode, ticketsAvailable, ticketPrice } = req.body;
     const userId = req.userId;
 
     try {
         const user = await User.findById(userId);
         if (!user) {
             return res.status(404).json({ error: "User not found" });
+        }
+
+        const photoPath = req.files?.photo?.[0]?.path;
+
+        if (!photoPath) {
+            return res.status(400).json({ error: "Photo is required" });
         }
 
         const newEvent = new Event({
@@ -45,7 +51,7 @@ export const createEvent = async (req, res) => {
             venue,
             description,
             createdBy: userId,
-            photos,
+            photo: photoPath,
             mode,
             ticketsAvailable,
             ticketPrice
@@ -60,7 +66,7 @@ export const createEvent = async (req, res) => {
 
 export const updateEvent = async (req, res) => {
     const { eventId } = req.params;
-    const { name, date, time, venue, description, mode, ticketsAvailable, ticketPrice, photos } = req.body;
+    const { name, date, time, venue, description, mode, ticketsAvailable, ticketPrice, photo } = req.body;
     
     try {
         const event = await Event.findById(eventId);
@@ -73,7 +79,7 @@ export const updateEvent = async (req, res) => {
         event.time = time || event.time;
         event.venue = venue || event.venue;
         event.description = description || event.description;
-        event.photos = photos || event.photos;
+        event.photo = photo || event.photo;
         event.mode = mode || event.mode;
         event.ticketsAvailable = ticketsAvailable || event.ticketsAvailable;
         event.ticketPrice = ticketPrice || event.ticketPrice;

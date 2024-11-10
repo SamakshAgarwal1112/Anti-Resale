@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 const JWT_SECRET = process.env.JWT_SECRET;
 
 export const signUp = async (req, res) => {
-    const { name, password, profilePicture, aadharNumber, aadharSoftCopy, isOrganization } = req.body;
+    const { name, password, aadharNumber, isOrganization } = req.body;
 
     try {
         const existingUser = await User.findOne({ aadharNumber });
@@ -15,12 +15,19 @@ export const signUp = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        const profilePicturePath = req.files?.profilePicture?.[0]?.path;
+        const aadharSoftCopyPath = req.files?.aadharSoftCopy?.[0]?.path;
+
+        if (!profilePicturePath || !aadharSoftCopyPath) {
+            return res.status(400).json({ error: "Profile picture and Aadhar soft copy are required" });
+        }
+
         const user = new User({
             name,
-            aadharNumber,
             password: hashedPassword,
-            profilePicture,
-            aadharSoftCopy,
+            profilePicture: profilePicturePath,
+            aadharNumber,
+            aadharSoftCopy: aadharSoftCopyPath,
             isOrganization
         });
 

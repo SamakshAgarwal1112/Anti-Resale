@@ -30,9 +30,10 @@ const eventSchema = new mongoose.Schema({
         ref: "User",
         required: true,
     },
-    photos: [{
-        type: String
-    }],
+    photo: { 
+        type: String, 
+        required: true
+    },
     mode: {
         type: String,
         enum: ['online', 'offline'],
