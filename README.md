@@ -7,10 +7,10 @@ TicketChain is a decentralized event ticketing platform designed to tackle the i
 ![TicketChain Main Page](./public/Landing.jpg)
 
 ## Features
-Event Exploration: Users can browse a list of events, including their details like title, date, location, price, and category.
-Ticket Purchase: Users can click the "Buy Ticket" button to purchase a ticket for an event.
-Ticket Return: After a ticket is purchased, a "Return Ticket" button will be displayed, allowing users to return their ticket.
-Event Creation - Organizations can list their events on the platform for smooth decentralised management.
+1. Event Exploration: Users can browse a list of events, including their details like title, date, location, price, and category.
+2. Ticket Purchase: Users can click the "Buy Ticket" button to purchase a ticket for an event.
+3. Ticket Return: After a ticket is purchased, a "Return Ticket" button will be displayed, allowing users to return their ticket.
+4. Event Creation - Organizations can list their events on the platform for smooth decentralised management.
 
 ## Getting Started
 
@@ -21,6 +21,8 @@ To run the project locally, follow these steps:
 3. Run the app with `npm run dev`.
 
 ## How It Works
+
+![TicketChain flowchart](./public/TicketChain2[1].png)
 
 ### 1. **User Registration**
 
